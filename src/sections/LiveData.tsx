@@ -5,6 +5,45 @@ import { Card, Pill, SectionTitle } from "../components/Shared";
 
 const GROUPS = ["Labor", "Rates & Credit", "Activity", "Valuation", "Risk"] as const;
 
+type ScoreLevel = "Normal" | "Abnormal" | "Critical" | "Market Breaking";
+
+function getScore(p: LivePoint): { level: ScoreLevel; color: string; desc: string; delta: string } {
+  const { normal, normalLow, normalHigh, critical, breaking, dangerHigh, value } = p;
+  if (normal === undefined || critical === undefined) {
+    return { level: "Normal", color: "#64748b", desc: "No benchmark set", delta: "" };
+  }
+  let level: ScoreLevel = "Normal";
+  let color = "#34d399"; // emerald
+  let deltaStr = "";
+
+  const nl = normalLow ?? normal;
+  const nh = normalHigh ?? normal;
+  if (dangerHigh) {
+    // Higher is worse
+    if (value >= (breaking ?? Infinity)) {
+      level = "Market Breaking"; color = "#fb7185"; deltaStr = `+${value - (nh ?? value)} above normal`;
+    } else if (value >= (critical ?? Infinity)) {
+      level = "Critical"; color = "#f87171"; deltaStr = `+${value - (nh ?? value)} above normal`;
+    } else if (value > nh) {
+      level = "Abnormal"; color = "#fbbf24"; deltaStr = `+${value - (nh ?? value)} above normal`;
+    } else {
+      level = "Normal"; color = "#34d399"; deltaStr = value <= nl ? `${(nl - value).toFixed(1)} below band` : `within normal`;
+    }
+  } else {
+    // Lower is worse
+    if (value <= (breaking ?? -Infinity)) {
+      level = "Market Breaking"; color = "#fb7185"; deltaStr = `-${(nl ?? value) - value} below normal`;
+    } else if (value <= (critical ?? -Infinity)) {
+      level = "Critical"; color = "#f87171"; deltaStr = `-${(nl ?? value) - value} below normal`;
+    } else if (value < nl) {
+      level = "Abnormal"; color = "#fbbf24"; deltaStr = `-${(nl ?? value) - value} below normal`;
+    } else {
+      level = "Normal"; color = "#34d399"; deltaStr = value >= nh ? `${(value - nh).toFixed(1)} above band` : `within normal`;
+    }
+  }
+  return { level, color, desc: deltaStr, delta: deltaStr };
+}
+
 export default function LiveData({
   points,
   status,
@@ -106,47 +145,73 @@ export default function LiveData({
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filtered.map((p) => (
-          <Card key={p.id} className="p-4">
-            <div className="flex items-start justify-between gap-2">
-              <div className="text-[10px] uppercase tracking-wider text-zinc-500">{p.group}</div>
-              {p.series && (
-                <a
-                  href={`https://fred.stlouisfed.org/series/${p.series}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[10px] text-cyan-500/80 hover:text-cyan-300"
+        {filtered.map((p) => {
+          const scoreInfo = getScore(p);
+          return (
+            <Card key={p.id} className="p-4 relative overflow-hidden">
+              <div className="absolute top-0 left-0 h-0.5 w-full" style={{ background: scoreInfo.color }} />
+              <div className="flex items-start justify-between gap-2">
+                <div className="text-[10px] uppercase tracking-wider text-zinc-500">{p.group}</div>
+                {p.series && (
+                  <a
+                    href={`https://fred.stlouisfed.org/series/${p.series}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[10px] text-cyan-500/80 hover:text-cyan-300"
+                  >
+                    {p.series} ↗
+                  </a>
+                )}
+              </div>
+              <div className="mt-1 text-sm font-medium text-zinc-200">{p.label}</div>
+              <div className="flex items-baseline gap-3 mt-2">
+                <div className="text-2xl font-semibold tabular-nums tracking-tight text-zinc-50">
+                  {p.unit.startsWith("$") ? (
+                    <>
+                      <span className="text-lg text-zinc-500">{p.unit[0]}</span>
+                      {p.value.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      <span className="ml-1 text-sm font-medium text-zinc-500">{p.unit.slice(1)}</span>
+                    </>
+                  ) : (
+                    <>
+                      {p.value.toLocaleString(undefined, {
+                        maximumFractionDigits: Math.abs(p.value) >= 100 ? 1 : 2,
+                      })}
+                      <span className="ml-1 text-sm font-medium text-zinc-500">{p.unit}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <span
+                  className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold"
+                  style={{ borderColor: scoreInfo.color + "40", background: scoreInfo.color + "18", color: scoreInfo.color }}
                 >
-                  {p.series} ↗
-                </a>
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ background: scoreInfo.color }} />
+                  {scoreInfo.level}
+                </span>
+                {p.normal !== undefined && (
+                  <span className="text-[11px] text-zinc-400 tabular-nums">
+                    normal {p.normal.toLocaleString(undefined, { maximumFractionDigits: Math.abs(p.normal) >= 100 ? 0 : 1 })}
+                    {p.unit}
+                  </span>
+                )}
+              </div>
+              <div className="mt-1 text-[11px] leading-relaxed text-zinc-500">
+                {scoreInfo.delta ? scoreInfo.delta : `as of ${p.asOf}`}
+              </div>
+              {p.critical !== undefined && (
+                <div className="mt-1 text-[10px] text-zinc-600 tabular-nums">
+                  abnormal &gt; {p.normalHigh?.toLocaleString()}{p.unit} · critical ≥ {p.critical?.toLocaleString()}{p.unit} · breaking ≥ {p.breaking?.toLocaleString()}{p.unit}
+                </div>
               )}
-            </div>
-            <div className="mt-1 text-sm font-medium text-zinc-200">{p.label}</div>
-            <div className="mt-2 text-2xl font-semibold tabular-nums tracking-tight text-zinc-50">
-              {p.unit.startsWith("$") ? (
-                <>
-                  <span className="text-lg text-zinc-500">{p.unit[0]}</span>
-                  {p.value.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                  <span className="ml-1 text-sm font-medium text-zinc-500">{p.unit.slice(1)}</span>
-                </>
-              ) : (
-                <>
-                  {p.value.toLocaleString(undefined, {
-                    maximumFractionDigits: Math.abs(p.value) >= 100 ? 1 : 2,
-                  })}
-                  <span className="ml-1 text-sm font-medium text-zinc-500">{p.unit}</span>
-                </>
-              )}
-            </div>
-            <div className="mt-2 flex items-center justify-between gap-2 text-[10px] text-zinc-500">
-              <span>as of {p.asOf}</span>
-            </div>
-            <div className="mt-1 truncate text-[10px] text-zinc-600" title={p.source}>
-              {p.source}
-            </div>
-            {p.note && <p className="mt-2 text-[11px] leading-relaxed text-zinc-500">{p.note}</p>}
-          </Card>
-        ))}
+              <div className="mt-2 truncate text-[10px] text-zinc-600" title={p.source}>
+                {p.source}
+              </div>
+              {p.note && <p className="mt-2 text-[11px] leading-relaxed text-zinc-500">{p.note}</p>}
+            </Card>
+          );
+        })}
       </div>
 
       {!!errors.length && (

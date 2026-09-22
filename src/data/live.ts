@@ -18,6 +18,16 @@ export interface LivePoint {
   /** Higher = more stressed when true */
   dangerHigh: boolean;
   note?: string;
+  /** Normal / healthy reference value */
+  normal?: number;
+  /** Normal healthy band (low) */
+  normalLow?: number;
+  /** Normal healthy band (high) */
+  normalHigh?: number;
+  /** Critical / recessionary stress threshold */
+  critical?: number;
+  /** Market-breaking / extreme crisis threshold */
+  breaking?: number;
 }
 
 /** Baked snapshot — every figure traced to a primary print below. */
@@ -35,6 +45,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "UNRATE",
     group: "Labor",
     dangerHigh: true,
+    normal: 4.0,
+    normalLow: 3.8,
+    normalHigh: 4.6,
+    critical: 5.5,
+    breaking: 7.5,
   },
   {
     id: "sahm",
@@ -47,6 +62,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Labor",
     dangerHigh: true,
     note: "Below 0.50 trigger. 2024 false positive peaked at 0.57 then fully reversed.",
+    normal: 0.0,
+    normalLow: -0.1,
+    normalHigh: 0.2,
+    critical: 0.5,
+    breaking: 1.0,
   },
   {
     id: "u6",
@@ -58,6 +78,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "U6RATE",
     group: "Labor",
     dangerHigh: true,
+    normal: 7.0,
+    normalLow: 6.5,
+    normalHigh: 7.5,
+    critical: 9.0,
+    breaking: 11.0,
   },
   {
     id: "hires",
@@ -69,6 +94,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "JTSHIR",
     group: "Labor",
     dangerHigh: false,
+    normal: 4.0,
+    normalLow: 3.8,
+    normalHigh: 4.3,
+    critical: 3.2,
+    breaking: 2.5,
   },
   {
     id: "jor",
@@ -80,6 +110,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "JTSJOR",
     group: "Labor",
     dangerHigh: false,
+    normal: 4.6,
+    normalLow: 4.3,
+    normalHigh: 4.9,
+    critical: 3.8,
+    breaking: 3.2,
   },
   {
     id: "quits",
@@ -91,6 +126,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "JTSQUR",
     group: "Labor",
     dangerHigh: false,
+    normal: 2.3,
+    normalLow: 2.0,
+    normalHigh: 2.6,
+    critical: 1.6,
+    breaking: 1.2,
   },
   {
     id: "claims",
@@ -103,6 +143,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Labor",
     dangerHigh: true,
     note: "Weekly level, thousands.",
+    normal: 220,
+    normalLow: 200,
+    normalHigh: 240,
+    critical: 300,
+    breaking: 400,
   },
   {
     id: "claims4w",
@@ -114,6 +159,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "IC4WSA",
     group: "Labor",
     dangerHigh: true,
+    normal: 230,
+    normalLow: 210,
+    normalHigh: 250,
+    critical: 300,
+    breaking: 400,
   },
   {
     id: "payrolls",
@@ -126,6 +176,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Labor",
     dangerHigh: false,
     note: "Level, thousands of workers.",
+    normal: 160000,
+    normalLow: 158000,
+    normalHigh: 163000,
+    critical: 150000,
+    breaking: 140000,
   },
   {
     id: "youth",
@@ -137,6 +192,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Labor",
     dangerHigh: true,
     note: "Degree-holders ~ages 22–27. NY Fed: 'stayed elevated at about 5.6%'.",
+    normal: 3.8,
+    normalLow: 3.5,
+    normalHigh: 4.2,
+    critical: 6.0,
+    breaking: 8.0,
   },
   {
     id: "emratio",
@@ -161,6 +221,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "DGS10",
     group: "Rates & Credit",
     dangerHigh: true,
+    normal: 4.0,
+    normalLow: 3.5,
+    normalHigh: 4.5,
+    critical: 5.5,
+    breaking: 6.5,
   },
   {
     id: "dff",
@@ -172,6 +237,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "DFF",
     group: "Rates & Credit",
     dangerHigh: true,
+    normal: 3.5,
+    normalLow: 3.0,
+    normalHigh: 4.0,
+    critical: 5.0,
+    breaking: 6.0,
   },
   {
     id: "curve",
@@ -184,6 +254,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Rates & Credit",
     dangerHigh: false,
     note: "Currently re-steepened. Cycle trough was −1.89 pp on 2023-05-04.",
+    normal: 0.5,
+    normalLow: 0.2,
+    normalHigh: 0.8,
+    critical: -0.2,
+    breaking: -0.8,
   },
   {
     id: "curve_min",
@@ -196,6 +271,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Rates & Credit",
     dangerHigh: false,
     note: "Deepest inversion of the 2022–24 cycle.",
+    normal: -0.5,
+    normalLow: -0.2,
+    normalHigh: -0.8,
+    critical: -1.5,
+    breaking: -2.0,
   },
   {
     id: "hyoas",
@@ -207,6 +287,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "BAMLH0A0HYM2",
     group: "Rates & Credit",
     dangerHigh: true,
+    normal: 2.5,
+    normalLow: 2.0,
+    normalHigh: 3.0,
+    critical: 4.5,
+    breaking: 6.0,
   },
   {
     id: "igoas",
@@ -218,6 +303,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "BAMLC0A0CM",
     group: "Rates & Credit",
     dangerHigh: true,
+    normal: 0.8,
+    normalLow: 0.6,
+    normalHigh: 1.0,
+    critical: 1.8,
+    breaking: 2.5,
   },
   {
     id: "delinq",
@@ -230,6 +320,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Rates & Credit",
     dangerHigh: true,
     note: "Commercial-bank credit-card loans 30+ days due. Distinct from NY Fed 90+ transition rates.",
+    normal: 2.2,
+    normalLow: 2.0,
+    normalHigh: 2.5,
+    critical: 4.0,
+    breaking: 6.5,
   },
   {
     id: "mtgdel",
@@ -241,6 +336,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "DRSFRMACBS",
     group: "Rates & Credit",
     dangerHigh: true,
+    normal: 1.5,
+    normalLow: 1.3,
+    normalHigh: 1.8,
+    critical: 3.0,
+    breaking: 5.0,
   },
   {
     id: "mort30",
@@ -252,6 +352,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "MORTGAGE30US",
     group: "Rates & Credit",
     dangerHigh: true,
+    normal: 6.0,
+    normalLow: 5.5,
+    normalHigh: 6.5,
+    critical: 8.0,
+    breaking: 10.0,
   },
   {
     id: "debt",
@@ -263,6 +368,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "GFDEGDQ188S",
     group: "Rates & Credit",
     dangerHigh: true,
+    normal: 60,
+    normalLow: 55,
+    normalHigh: 70,
+    critical: 100,
+    breaking: 130,
   },
   {
     id: "tdsp",
@@ -274,6 +384,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "TDSP",
     group: "Rates & Credit",
     dangerHigh: true,
+    normal: 10,
+    normalLow: 9,
+    normalHigh: 11,
+    critical: 12,
+    breaking: 14,
   },
   {
     id: "margin",
@@ -286,6 +401,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Rates & Credit",
     dangerHigh: true,
     note: "Security brokers & dealers; security credit outstanding. Closest public FoF proxy for margin debt.",
+    normal: 700,
+    normalLow: 650,
+    normalHigh: 800,
+    critical: 950,
+    breaking: 1200,
   },
   {
     id: "nfci",
@@ -298,6 +418,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Rates & Credit",
     dangerHigh: true,
     note: "Negative = looser than average financial conditions.",
+    normal: -0.3,
+    normalLow: -0.5,
+    normalHigh: -0.1,
+    critical: -0.7,
+    breaking: -1.0,
   },
 
   // Activity
@@ -311,6 +436,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "A191RL1Q225SBEA",
     group: "Activity",
     dangerHigh: false,
+    normal: 2.5,
+    normalLow: 2.0,
+    normalHigh: 3.0,
+    critical: 0.5,
+    breaking: -1.5,
   },
   {
     id: "indpro",
@@ -322,6 +452,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "INDPRO",
     group: "Activity",
     dangerHigh: false,
+    normal: 103,
+    normalLow: 101,
+    normalHigh: 105,
+    critical: 98,
+    breaking: 95,
   },
   {
     id: "houst",
@@ -333,6 +468,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "HOUST",
     group: "Activity",
     dangerHigh: false,
+    normal: 1400,
+    normalLow: 1300,
+    normalHigh: 1500,
+    critical: 1000,
+    breaking: 800,
   },
   {
     id: "sentiment",
@@ -344,6 +484,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "UMCSENT",
     group: "Activity",
     dangerHigh: false,
+    normal: 90,
+    normalLow: 85,
+    normalHigh: 95,
+    critical: 55,
+    breaking: 40,
   },
   {
     id: "save",
@@ -355,6 +500,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "PSAVERT",
     group: "Activity",
     dangerHigh: false,
+    normal: 7.0,
+    normalLow: 6.0,
+    normalHigh: 8.0,
+    critical: 3.5,
+    breaking: 2.0,
   },
   {
     id: "cli",
@@ -367,6 +517,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Activity",
     dangerHigh: false,
     note: "Amplitude-adjusted composite leading indicator, 12-month percent change.",
+    normal: 1.0,
+    normalLow: 0.5,
+    normalHigh: 1.5,
+    critical: -2.5,
+    breaking: -4.5,
   },
   {
     id: "recprob",
@@ -379,6 +534,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Activity",
     dangerHigh: true,
     note: "Treasury-spread-based smoothed probability. Near-zero reading.",
+    normal: 25,
+    normalLow: 20,
+    normalHigh: 30,
+    critical: 40,
+    breaking: 55,
   },
 
   // Valuation
@@ -392,6 +552,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "SP500",
     group: "Valuation",
     dangerHigh: true,
+    normal: 6900,
+    normalLow: 6500,
+    normalHigh: 7300,
+    critical: 8500,
+    breaking: 9500,
   },
   {
     id: "cape",
@@ -403,6 +568,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Valuation",
     dangerHigh: true,
     note: "multpl.com current Shiller PE. Only 1929 and 2000 printed higher peaks.",
+    normal: 20,
+    normalLow: 18,
+    normalHigh: 25,
+    critical: 35,
+    breaking: 45,
   },
   {
     id: "pe",
@@ -413,6 +583,11 @@ export const SNAPSHOT: LivePoint[] = [
     source: "Multpl",
     group: "Valuation",
     dangerHigh: true,
+    normal: 18,
+    normalLow: 16,
+    normalHigh: 21,
+    critical: 28,
+    breaking: 32,
   },
   {
     id: "ey",
@@ -423,6 +598,11 @@ export const SNAPSHOT: LivePoint[] = [
     source: "Multpl",
     group: "Valuation",
     dangerHigh: false,
+    normal: 4.0,
+    normalLow: 3.5,
+    normalHigh: 4.5,
+    critical: 3.0,
+    breaking: 2.0,
   },
   {
     id: "erp",
@@ -434,6 +614,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Valuation",
     dangerHigh: false,
     note: "Trailing earnings yield minus 10-year Treasury. Negative = stocks yield less than Treasuries.",
+    normal: 2.0,
+    normalLow: 1.5,
+    normalHigh: 3.0,
+    critical: -1.5,
+    breaking: -3.5,
   },
   {
     id: "mktgdp",
@@ -445,6 +630,11 @@ export const SNAPSHOT: LivePoint[] = [
     group: "Valuation",
     dangerHigh: true,
     note: "Buffett Indicator approximation. GuruFocus prints ~244% on a related methodology.",
+    normal: 100,
+    normalLow: 90,
+    normalHigh: 120,
+    critical: 180,
+    breaking: 220,
   },
   {
     id: "gdp",
@@ -456,6 +646,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "GDP",
     group: "Valuation",
     dangerHigh: false,
+    normal: 30,
+    normalLow: 28,
+    normalHigh: 33,
+    critical: 25,
+    breaking: 20,
   },
 
   // Risk
@@ -469,6 +664,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "VIXCLS",
     group: "Risk",
     dangerHigh: true,
+    normal: 15,
+    normalLow: 13,
+    normalHigh: 18,
+    critical: 30,
+    breaking: 45,
   },
   {
     id: "termprem",
@@ -480,6 +680,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "THREEFYTP10",
     group: "Risk",
     dangerHigh: true,
+    normal: 1.0,
+    normalLow: 0.7,
+    normalHigh: 1.3,
+    critical: -0.2,
+    breaking: -0.8,
   },
   {
     id: "breakeven",
@@ -491,6 +696,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "T5YIFR",
     group: "Risk",
     dangerHigh: true,
+    normal: 2.2,
+    normalLow: 2.0,
+    normalHigh: 2.5,
+    critical: 3.5,
+    breaking: 4.5,
   },
   {
     id: "oil",
@@ -502,6 +712,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "DCOILWTICO",
     group: "Risk",
     dangerHigh: true,
+    normal: 75,
+    normalLow: 65,
+    normalHigh: 85,
+    critical: 110,
+    breaking: 140,
   },
   {
     id: "dollar",
@@ -513,6 +728,11 @@ export const SNAPSHOT: LivePoint[] = [
     series: "DTWEXBGS",
     group: "Risk",
     dangerHigh: true,
+    normal: 105,
+    normalLow: 100,
+    normalHigh: 110,
+    critical: 118,
+    breaking: 125,
   },
 ];
 
